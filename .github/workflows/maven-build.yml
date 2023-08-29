@@ -4,7 +4,7 @@
 name: Java CI with Maven with Inspections
 
 on:
-  pull_request:
+  push:
     branches: [ inspections ]
 
 jobs:
