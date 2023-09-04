@@ -34,10 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          pr-mode: true
-          fetch-depth: 0
-          push-fixes: false
+#          ref: ${{ github.event.pull_request.head.sha }}
           args: --property=project.open.type=Maven
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
