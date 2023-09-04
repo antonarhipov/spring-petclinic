@@ -38,6 +38,7 @@ jobs:
           pr-mode: true
           fetch-depth: 0
           push-fixes: false
+          args: --property=project.open.type=Maven
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
         env:
