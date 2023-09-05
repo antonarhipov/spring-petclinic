@@ -67,29 +67,29 @@ public class ExperimentsForPullRequests {
 		int x = 18;
 		x *= 3 / 2; // doesn't change x because of the integer division result
 
-		while (true) {
+//		while (true) {
 			// empty body
-		}
+//		}
 	}
 
 	void print(Object[] objects) {
-		System.out.println(objects);
+//		System.out.println(objects);
 
 		String[] strings = new String[] { "asdf" };
 		System.out.println(strings.hashCode());
 	}
 
-	int baz() {
-		return baz();
-	}
+//	int baz() {
+//		return baz();
+//	}
 
 	@Retention(RetentionPolicy.SOURCE)
 	@interface SourceAnnotation {
 
 	}
 
-	public static void annotationMisuse() {
-		ExperimentsForPullRequests.class.isAnnotationPresent(SourceAnnotation.class);
-	}
+//	public static void annotationMisuse() {
+//		ExperimentsForPullRequests.class.isAnnotationPresent(SourceAnnotation.class);
+//	}
 
 }
