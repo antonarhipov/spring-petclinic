@@ -31,29 +31,6 @@ public class ExperimentsForPullRequests {
 		return "";
 	}
 
-	public static void commentedCode() {
-		System.out.println();
-		// System.out.println("ExperimentsForPullRequests.commentedCode");
-		// System.out.println("Hello");
-		// System.out.println();
-
-		String string = "Hello";
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-		System.out.println("string = " + string);
-	}
-
 	public void catchAndPrint() {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("file"));
@@ -61,11 +38,11 @@ public class ExperimentsForPullRequests {
 			System.out.println(string);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getLocalizedMessage());
 		}
 
 		int x = 18;
-		x *= 3 / 2; // doesn't change x because of the integer division result
+		// x *= 3 / 2; // doesn't change x because of the integer division result
 
 		// while (true) {
 		// empty body
@@ -75,8 +52,8 @@ public class ExperimentsForPullRequests {
 	void print(Object[] objects) {
 		// System.out.println(objects);
 
-		String[] strings = new String[] { "asdf" };
-		System.out.println(strings.hashCode());
+		// String[] strings = new String[] { "asdf" };
+		// System.out.println(strings.hashCode());
 	}
 
 	// int baz() {
