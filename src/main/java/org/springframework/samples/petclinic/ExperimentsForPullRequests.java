@@ -22,7 +22,7 @@ public class ExperimentsForPullRequests {
 	}
 
 	@Deprecated(forRemoval = true)
-	public static String boo(){
+	public static String boo() {
 		System.out.println();
 		return "";
 	}
