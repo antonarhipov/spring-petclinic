@@ -18,7 +18,7 @@ include:
 #    paths:
 #      - <path/where/not/run/inspection>
 
-projectJDK: jbr-21 #(Applied in CI/CD pipeline)
+projectJDK: 19
 
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh
