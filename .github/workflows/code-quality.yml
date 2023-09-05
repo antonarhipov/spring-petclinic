@@ -41,6 +41,9 @@ jobs:
         with:
           args: --property=project.open.type=Maven
           pr-mode: true
+          cache-dir: ${{ runner.temp }}/qodana/caches
+          use-caches: true
+          post-pr-comment: true
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 
