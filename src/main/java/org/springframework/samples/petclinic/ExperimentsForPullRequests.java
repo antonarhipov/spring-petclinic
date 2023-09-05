@@ -49,24 +49,9 @@ public class ExperimentsForPullRequests {
 		// }
 	}
 
-	void print(Object[] objects) {
-		// System.out.println(objects);
-
-		// String[] strings = new String[] { "asdf" };
-		// System.out.println(strings.hashCode());
-	}
-
-	// int baz() {
-	// return baz();
-	// }
-
 	@Retention(RetentionPolicy.SOURCE)
 	@interface SourceAnnotation {
 
 	}
-
-	// public static void annotationMisuse() {
-	// ExperimentsForPullRequests.class.isAnnotationPresent(SourceAnnotation.class);
-	// }
 
 }
