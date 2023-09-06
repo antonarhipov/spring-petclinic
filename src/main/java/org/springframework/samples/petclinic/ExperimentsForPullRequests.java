@@ -13,6 +13,12 @@ public class ExperimentsForPullRequests {
 	public static void foo(@Nullable String s) {
 		System.out.println("String length: " + s.length());
 	}
+	public static void foo1(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
+	public static void foo2(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
 
 	public static void bar() {
 		while (true) {
@@ -42,16 +48,12 @@ public class ExperimentsForPullRequests {
 		}
 
 		int x = 18;
-		// x *= 3 / 2; // doesn't change x because of the integer division result
+		 x *= 3 / 2; // doesn't change x because of the integer division result
 
-		// while (true) {
-		// empty body
-		// }
+		 while (true) {
+//		 empty body
+		 }
 	}
 
-	@Retention(RetentionPolicy.SOURCE)
-	@interface SourceAnnotation {
-
-	}
 
 }
