@@ -154,6 +154,14 @@ public class ExperimentsForPullRequests {
 		System.out.println("String length: " + s.length());
 	}
 
+	public static void foo37(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
+
+	public static void foo38(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
+
 	public static void bar() {
 		while (true) {
 			System.out.println("test");
