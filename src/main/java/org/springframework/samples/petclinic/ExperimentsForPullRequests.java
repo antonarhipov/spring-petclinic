@@ -22,7 +22,7 @@ public class ExperimentsForPullRequests {
 
 	public static void baz(Optional<String> os) {
 		System.out.println(os.get());
-//		boo();
+		// boo();
 	}
 
 	@Deprecated(forRemoval = true)
@@ -42,7 +42,7 @@ public class ExperimentsForPullRequests {
 		}
 
 		int x = 18;
-//		x *= 3 / 2; // doesn't change x because of the integer division result
+		// x *= 3 / 2; // doesn't change x because of the integer division result
 
 	}
 
