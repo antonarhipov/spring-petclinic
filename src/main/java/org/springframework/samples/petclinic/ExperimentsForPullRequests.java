@@ -194,6 +194,22 @@ public class ExperimentsForPullRequests {
 		System.out.println("String length: " + s.length());
 	}
 
+	public static void foo55(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
+
+	public static void foo56(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
+
+	public static void foo57(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
+
+	public static void foo58(@Nullable String s) {
+		System.out.println("String length: " + s.length());
+	}
+
 	public static void bar() {
 		while (true) {
 			System.out.println("test");
