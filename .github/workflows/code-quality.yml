@@ -40,7 +40,7 @@ jobs:
         uses: JetBrains/qodana-action@v2023.2
         with:
           args: --property=project.open.type=Maven, --fail-threshold=30
-#          pr-mode: true
+          pr-mode: true
           cache-dir: ${{ runner.temp }}/qodana/caches
           use-caches: true
           post-pr-comment: true
