@@ -12,6 +12,7 @@ profile:
 include:
   - name: All
   - name: CheckDependencyLicenses
+  - name: VulnerableLibrariesGlobal
 
 #Disable inspections
 #exclude:
