@@ -149,4 +149,31 @@ class PetController {
 		return "redirect:/owners/{ownerId}";
 	}
 
+	public String processUpdate(@Valid Pet updatedPet, BindingResult r, Owner owner, ModelMap data) {
+
+		String name = updatedPet.getName();
+
+		// checking if the pet name already exist for the owner
+		if (StringUtils.hasText(name)) {
+			Pet existingPet = owner.getPet(name.toLowerCase(), false);
+			if (existingPet != null && existingPet.getId() != updatedPet.getId()) {
+				r.rejectValue("name", "duplicate", "already exists");
+			}
+		}
+
+		LocalDate currentDate = LocalDate.now();
+		if (updatedPet.getBirthDate() != null && updatedPet.getBirthDate().isAfter(currentDate)) {
+			r.rejectValue("birthDate", "typeMismatch.birthDate");
+		}
+
+		if (r.hasErrors()) {
+			data.put("pet", updatedPet);
+			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+		}
+
+		owner.addPet(updatedPet);
+		this.owners.save(owner);
+		return "redirect:/owners/{owner}";
+	}
+
 }
