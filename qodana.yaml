@@ -10,7 +10,8 @@ profile:
 
 #Enable inspections
 include:
-#  - name: All
+  - name: All
+  - name: JvmCoverageInspection
   - name: CheckDependencyLicenses
   - name: VulnerableLibrariesGlobal
 
