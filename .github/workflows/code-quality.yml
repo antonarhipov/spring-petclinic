@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '17' ]
+        java: [ '21' ]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK ${{matrix.java}}
@@ -40,7 +40,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2023.2
+        uses: JetBrains/qodana-action@v2023.3
         with:
           args: --property=project.open.type=Maven, --fail-threshold=30
           pr-mode: true
