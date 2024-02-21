@@ -4,9 +4,12 @@
 name: Code Quality for Pull Requests
 
 on:
+  push:
+    branches:
+      - feature-QD001
   pull_request:
     branches:
-      - main
+      - feature-QD001
 
 jobs:
   verify:
