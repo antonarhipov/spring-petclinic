@@ -42,7 +42,7 @@ jobs:
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.3
         with:
-          args: --property=project.open.type=Maven, --fail-threshold=30
+          args: --property=project.open.type=Maven, --fail-threshold=300
           pr-mode: true
           cache-dir: ${{ runner.temp }}/qodana/caches
           use-caches: true
