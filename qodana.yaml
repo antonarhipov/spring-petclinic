@@ -39,3 +39,35 @@ projectJDK: "21" #(Applied in CI/CD pipeline)
 
 #Specify Qodana linter for analysis (Applied in CI/CD pipeline)
 linter: jetbrains/qodana-jvm:latest
+
+failureConditions:
+  severityThresholds:
+    any: 300
+    critical: 70
+    high: 100
+    moderate: 100
+#    low: <number>
+#    info: <number>
+  testCoverageThresholds:
+#    fresh: <number> # Fresh code coverage
+    total: 60 # Total code coverage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
