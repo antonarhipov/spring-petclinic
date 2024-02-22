@@ -47,7 +47,7 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
         with:
-          args: "--linter,jetbrains/qodana-jvm:latest"
+          args: "--property,project.open.type=Maven,--linter,jetbrains/qodana-jvm:latest"
           pr-mode: false
   qodana:
     runs-on: ubuntu-latest
