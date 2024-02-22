@@ -42,6 +42,13 @@ jobs:
           name: maven-coverage-data-jacoco
           path: .qodana/code-coverage
 
+      - name: Qodana Scan
+        uses: JetBrains/qodana-action@main
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          args: "--linter,jetbrains/qodana-jvm:latest"
+          pr-mode: false
   qodana:
     runs-on: ubuntu-latest
     permissions:
