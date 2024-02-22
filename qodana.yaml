@@ -50,7 +50,7 @@ failureConditions:
 #    info: <number>
   testCoverageThresholds:
 #    fresh: <number> # Fresh code coverage
-    total: 60 # Total code coverage
+    total: 90 # Total code coverage
 
 
 
