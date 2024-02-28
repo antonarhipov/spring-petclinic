@@ -14,13 +14,6 @@ include:
   - name: CheckDependencyLicenses
   - name: VulnerableLibrariesGlobal
 
-licenseRules:
-  - keys:
-      - "AFL-2.0"
-    prohibited:
-      - "Apache-1.0"
-      - "GPL-2.0"
-
 #Disable inspections
 #exclude:
 #  - name: <SomeDisabledInspectionId>
