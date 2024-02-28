@@ -15,14 +15,15 @@ public class ExperimentsForPullRequests {
 	}
 
 	public static void bar() {
+		var i = 0;
 		while (true) {
-			System.out.println("test");
+			i++;
 		}
 	}
 
 	public static void baz(Optional<String> os) {
 		System.out.println(os.get());
-		// boo();
+		boo();
 	}
 
 	@Deprecated(forRemoval = true)

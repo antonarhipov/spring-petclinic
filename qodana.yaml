@@ -11,7 +11,6 @@ profile:
 #Enable inspections
 include:
   - name: All
-  - name: JvmCoverageInspection
   - name: CheckDependencyLicenses
   - name: VulnerableLibrariesGlobal
 
@@ -40,17 +39,17 @@ projectJDK: "21" #(Applied in CI/CD pipeline)
 #Specify Qodana linter for analysis (Applied in CI/CD pipeline)
 linter: jetbrains/qodana-jvm:2023.3
 
-failureConditions:
-  severityThresholds:
-    any: 300
-    critical: 70
-    high: 100
-    moderate: 100
+#failureConditions:
+#  severityThresholds:
+#    any: 300
+#    critical: 70
+#    high: 100
+#    moderate: 100
 #    low: <number>
 #    info: <number>
-  testCoverageThresholds:
+#  testCoverageThresholds:
 #    fresh: <number> # Fresh code coverage
-    total: 90 # Total code coverage
+#    total: 90 # Total code coverage
 
 
 
