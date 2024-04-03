@@ -66,11 +66,11 @@ jobs:
 #        uses: JetBrains/qodana-action@v2023.3.1
         uses: JetBrains/qodana-action@main
         with:
-          args: --property=project.open.type=Maven, --fail-threshold=300
-          pr-mode: true
-          cache-dir: ${{ runner.temp }}/qodana/caches
+          args: --property=project.open.type=Maven, --apply-fixes
           use-caches: true
+          cache-dir: ${{ runner.temp }}/qodana/caches
           post-pr-comment: true
+          push-fixes: pull-request
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 

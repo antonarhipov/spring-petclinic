@@ -32,7 +32,7 @@ projectJDK: "21" #(Applied in CI/CD pipeline)
 #Specify Qodana linter for analysis (Applied in CI/CD pipeline)
 linter: jetbrains/qodana-jvm:2023.3
 
-fixesStrategy: apply
+#fixesStrategy: apply
 
 #failureConditions:
 #  severityThresholds:
