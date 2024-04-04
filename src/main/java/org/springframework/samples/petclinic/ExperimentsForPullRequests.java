@@ -43,7 +43,7 @@ public class ExperimentsForPullRequests {
 		}
 
 		int x = 18;
-		// x *= 3 / 2; // doesn't change x because of the integer division result
+		 x *= 3 / 2; // doesn't change x because of the integer division result
 
 	}
 
