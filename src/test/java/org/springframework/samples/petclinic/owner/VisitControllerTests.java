@@ -32,6 +32,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 /**
  * Test class for {@link VisitController}
  *
@@ -52,13 +54,17 @@ class VisitControllerTests {
 	@MockBean
 	private OwnerRepository owners;
 
+	@MockBean
+	private PetRepository pets;
+
 	@BeforeEach
 	void init() {
 		Owner owner = new Owner();
 		Pet pet = new Pet();
 		owner.addPet(pet);
 		pet.setId(TEST_PET_ID);
-		given(this.owners.findById(TEST_OWNER_ID)).willReturn(owner);
+		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(owner));
+		given(this.pets.findById(TEST_PET_ID)).willReturn(Optional.of(owner.getPets().get(0)));
 	}
 
 	@Test

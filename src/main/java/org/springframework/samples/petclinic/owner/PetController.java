@@ -46,8 +46,11 @@ class PetController {
 
 	private final OwnerRepository owners;
 
-	public PetController(OwnerRepository owners) {
+	private final PetRepository pets;
+
+	public PetController(OwnerRepository owners, PetRepository pets) {
 		this.owners = owners;
+		this.pets = pets;
 	}
 
 	@ModelAttribute("types")
@@ -57,27 +60,14 @@ class PetController {
 
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
-
-		Owner owner = this.owners.findById(ownerId);
-		if (owner == null) {
-			throw new IllegalArgumentException("Owner ID not found: " + ownerId);
-		}
-		return owner;
+		return this.owners.findById(ownerId)
+			.orElseThrow(() -> new IllegalArgumentException("Invalid owner Id:" + ownerId));
 	}
 
 	@ModelAttribute("pet")
-	public Pet findPet(@PathVariable("ownerId") int ownerId,
-			@PathVariable(name = "petId", required = false) Integer petId) {
-
-		if (petId == null) {
-			return new Pet();
-		}
-
-		Owner owner = this.owners.findById(ownerId);
-		if (owner == null) {
-			throw new IllegalArgumentException("Owner ID not found: " + ownerId);
-		}
-		return owner.getPet(petId);
+	public Pet findPet(@PathVariable(name = "petId", required = false) Integer petId) {
+		return petId == null ? new Pet()
+				: this.pets.findById(petId).orElseThrow(() -> new IllegalArgumentException("Invalid pet Id:" + petId));
 	}
 
 	@InitBinder("owner")
@@ -100,14 +90,9 @@ class PetController {
 
 	@PostMapping("/pets/new")
 	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, ModelMap model,
-			RedirectAttributes redirectAttributes) {
-		if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
+			RedirectAttributes attributes) {
+		if (StringUtils.hasLength(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
 			result.rejectValue("name", "duplicate", "already exists");
-		}
-
-		LocalDate currentDate = LocalDate.now();
-		if (pet.getBirthDate() != null && pet.getBirthDate().isAfter(currentDate)) {
-			result.rejectValue("birthDate", "typeMismatch.birthDate");
 		}
 
 		owner.addPet(pet);
@@ -116,47 +101,28 @@ class PetController {
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 
-		this.owners.save(owner);
-		redirectAttributes.addFlashAttribute("message", "New Pet has been Added");
-		return "redirect:/owners/{ownerId}";
+		this.pets.save(pet);
+		return "redirect:/owners/" + owner.getId();
 	}
 
 	@GetMapping("/pets/{petId}/edit")
-	public String initUpdateForm(Owner owner, @PathVariable("petId") int petId, ModelMap model,
-			RedirectAttributes redirectAttributes) {
-		Pet pet = owner.getPet(petId);
+	public String initUpdateForm(Owner owner, @PathVariable("petId") int petId, ModelMap model) {
+		Pet pet = this.pets.findById(petId).orElseThrow(() -> new IllegalArgumentException("Invalid pet Id:" + petId));
 		model.put("pet", pet);
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping("/pets/{petId}/edit")
 	public String processUpdateForm(@Valid Pet pet, BindingResult result, Owner owner, ModelMap model,
-			RedirectAttributes redirectAttributes) {
-
-		String petName = pet.getName();
-
-		// checking if the pet name already exist for the owner
-		if (StringUtils.hasText(petName)) {
-			Pet existingPet = owner.getPet(petName.toLowerCase(), false);
-			if (existingPet != null && existingPet.getId() != pet.getId()) {
-				result.rejectValue("name", "duplicate", "already exists");
-			}
-		}
-
-		LocalDate currentDate = LocalDate.now();
-		if (pet.getBirthDate() != null && pet.getBirthDate().isAfter(currentDate)) {
-			result.rejectValue("birthDate", "typeMismatch.birthDate");
-		}
-
+			RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			model.put("pet", pet);
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 
 		owner.addPet(pet);
-		this.owners.save(owner);
-		redirectAttributes.addFlashAttribute("message", "Pet details has been edited");
-		return "redirect:/owners/{ownerId}";
+		this.pets.save(pet);
+		return "redirect:/owners/" + owner.getId();
 	}
 
 }

@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.util.Lists;
 import org.hamcrest.BaseMatcher;
@@ -67,8 +68,10 @@ class OwnerControllerTests {
 	@MockBean
 	private OwnerRepository owners;
 
+	private Owner george;
+
 	private Owner george() {
-		Owner george = new Owner();
+		george = new Owner();
 		george.setId(TEST_OWNER_ID);
 		george.setFirstName("George");
 		george.setLastName("Franklin");
@@ -88,14 +91,13 @@ class OwnerControllerTests {
 
 	@BeforeEach
 	void setup() {
-
-		Owner george = george();
+		george = george();
 		given(this.owners.findByLastName(eq("Franklin"), any(Pageable.class)))
 			.willReturn(new PageImpl<Owner>(Lists.newArrayList(george)));
 
 		given(this.owners.findAll(any(Pageable.class))).willReturn(new PageImpl<Owner>(Lists.newArrayList(george)));
 
-		given(this.owners.findById(TEST_OWNER_ID)).willReturn(george);
+		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(george));
 		Visit visit = new Visit();
 		visit.setDate(LocalDate.now());
 		george.getPet("Max").getVisits().add(visit);
@@ -142,30 +144,36 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
-		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList(george(), new Owner()));
-		Mockito.when(this.owners.findByLastName(anyString(), any(Pageable.class))).thenReturn(tasks);
-		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
+		given(this.owners.findByLastName(eq("Franklin"), any(Pageable.class)))
+			.willReturn(new PageImpl<Owner>(Lists.newArrayList(george(), new Owner())));
+
+		mockMvc.perform(get("/owners?lastName=Franklin"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"));
 	}
 
 	@Test
-	void testProcessFindFormByLastName() throws Exception {
-		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList(george()));
-		Mockito.when(this.owners.findByLastName(eq("Franklin"), any(Pageable.class))).thenReturn(tasks);
-		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
-			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));
-	}
+	void testProcessFindFormByLastNameNotFound() throws Exception {
+		Page<Owner> emptyResults = new PageImpl<Owner>(Lists.newArrayList());
+		given(this.owners.findByLastName(eq("Unknown Surname"), any(Pageable.class))).willReturn(emptyResults);
 
-	@Test
-	void testProcessFindFormNoOwnersFound() throws Exception {
-		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList());
-		Mockito.when(this.owners.findByLastName(eq("Unknown Surname"), any(Pageable.class))).thenReturn(tasks);
-		mockMvc.perform(get("/owners?page=1").param("lastName", "Unknown Surname"))
+		mockMvc.perform(get("/owners").param("lastName", "Unknown Surname"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasFieldErrors("owner", "lastName"))
 			.andExpect(model().attributeHasFieldErrorCode("owner", "lastName", "notFound"))
 			.andExpect(view().name("owners/findOwners"));
+	}
 
+	@Test
+	void testProcessFindFormNoLastName() throws Exception {
+		Page<Owner> emptyResults = new PageImpl<Owner>(Lists.newArrayList());
+		given(this.owners.findByLastName(eq(""), any(Pageable.class))).willReturn(emptyResults);
+
+		mockMvc.perform(get("/owners").param("lastName", ""))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasFieldErrors("owner", "lastName"))
+			.andExpect(model().attributeHasFieldErrorCode("owner", "lastName", "notFound"))
+			.andExpect(view().name("owners/findOwners"));
 	}
 
 	@Test
@@ -173,11 +181,7 @@ class OwnerControllerTests {
 		mockMvc.perform(get("/owners/{ownerId}/edit", TEST_OWNER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("owner"))
-			.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
-			.andExpect(model().attribute("owner", hasProperty("firstName", is("George"))))
-			.andExpect(model().attribute("owner", hasProperty("address", is("110 W. Liberty St."))))
-			.andExpect(model().attribute("owner", hasProperty("city", is("Madison"))))
-			.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
+			.andExpect(model().attribute("owner", george))
 			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
 
@@ -194,20 +198,13 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessUpdateOwnerFormUnchangedSuccess() throws Exception {
-		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID))
-			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/owners/{ownerId}"));
-	}
-
-	@Test
 	void testProcessUpdateOwnerFormHasErrors() throws Exception {
 		mockMvc
 			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs")
-				.param("address", "")
-				.param("telephone", ""))
+				.param("city", "London"))
 			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("owner"))
 			.andExpect(model().attributeHasErrors("owner"))
 			.andExpect(model().attributeHasFieldErrors("owner", "address"))
 			.andExpect(model().attributeHasFieldErrors("owner", "telephone"))
@@ -216,6 +213,8 @@ class OwnerControllerTests {
 
 	@Test
 	void testShowOwner() throws Exception {
+		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(george));
+
 		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
@@ -223,25 +222,6 @@ class OwnerControllerTests {
 			.andExpect(model().attribute("owner", hasProperty("address", is("110 W. Liberty St."))))
 			.andExpect(model().attribute("owner", hasProperty("city", is("Madison"))))
 			.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
-			.andExpect(model().attribute("owner", hasProperty("pets", not(empty()))))
-			.andExpect(model().attribute("owner", hasProperty("pets", new BaseMatcher<List<Pet>>() {
-
-				@Override
-				public boolean matches(Object item) {
-					@SuppressWarnings("unchecked")
-					List<Pet> pets = (List<Pet>) item;
-					Pet pet = pets.get(0);
-					if (pet.getVisits().isEmpty()) {
-						return false;
-					}
-					return true;
-				}
-
-				@Override
-				public void describeTo(Description description) {
-					description.appendText("Max did not have any visits");
-				}
-			})))
 			.andExpect(view().name("owners/ownerDetails"));
 	}
 

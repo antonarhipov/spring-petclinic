@@ -27,6 +27,7 @@
     <webjars-bootstrap.version>5.3.2</webjars-bootstrap.version>
     <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
 
+    <mapstruct.version>1.5.5.Final</mapstruct.version>
     <checkstyle.version>10.12.5</checkstyle.version>
     <jacoco.version>0.8.11</jacoco.version>
     <libsass.version>0.2.29</libsass.version>
@@ -139,6 +140,18 @@
       <artifactId>jakarta.xml.bind-api</artifactId>
     </dependency>
 
+<!-- MapStruct -->
+<dependency>
+    <groupId>org.mapstruct</groupId>
+    <artifactId>mapstruct</artifactId>
+    <version>${mapstruct.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.mapstruct</groupId>
+    <artifactId>mapstruct-processor</artifactId>
+    <version>${mapstruct.version}</version>
+    <scope>provided</scope>
+</dependency>
   </dependencies>
 
   <build>
@@ -252,6 +265,21 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
       </plugin>
 
       <!-- Spring Boot Actuator displays build-related information if a git.properties
